@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="Ahskp3" name="Augs Synth" projectType="audioplug" jucerVersion="5.4.7">
+<JUCERPROJECT id="Ahskp3" name="Augs Synth" projectType="audioplug" jucerVersion="5.4.7"
+              pluginVST3Category="Instrument,Synth" pluginCharacteristicsValue="pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn">
   <MAINGROUP id="PhCh5B" name="Augs Synth">
     <GROUP id="{8A646E7D-788C-F100-CDB0-4BAEF60D8B7F}" name="Source">
+      <FILE id="UFrg5A" name="SineWaveSound.h" compile="1" resource="0" file="Source/SineWaveSound.h"/>
+      <FILE id="wvQK4d" name="SineWaveVoice.cpp" compile="1" resource="0"
+            file="Source/SineWaveVoice.cpp"/>
+      <FILE id="MzvWE8" name="SineWaveVoice.h" compile="1" resource="0" file="Source/SineWaveVoice.h"/>
       <FILE id="G7dpMz" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="kJg7nM" name="PluginProcessor.h" compile="0" resource="0"

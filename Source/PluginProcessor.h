@@ -18,6 +18,9 @@
 class AugsSynthAudioProcessor  : public AudioProcessor
 {
 public:
+    float noteOnVel;
+
+
     //==============================================================================
     AugsSynthAudioProcessor();
     ~AugsSynthAudioProcessor();
@@ -56,6 +59,8 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    Synthesiser mSynth;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AugsSynthAudioProcessor)
 };
