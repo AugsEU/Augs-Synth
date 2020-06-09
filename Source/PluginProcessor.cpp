@@ -138,6 +138,7 @@ bool AugsSynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
     buffer.clear();
+    mKeyState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
     mSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     
 }
@@ -151,7 +152,7 @@ bool AugsSynthAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* AugsSynthAudioProcessor::createEditor()
 {
-    return new AugsSynthAudioProcessorEditor (*this);
+    return new AugsSynthAudioProcessorEditor (*this, mKeyState);
 }
 
 //==============================================================================

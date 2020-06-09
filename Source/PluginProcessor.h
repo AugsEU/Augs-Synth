@@ -57,9 +57,11 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-
+    //==============================================================================
+    void UpdateKeyState(MidiKeyboardState& newState);
 private:
     Synthesiser mSynth;
+    MidiKeyboardState mKeyState;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AugsSynthAudioProcessor)

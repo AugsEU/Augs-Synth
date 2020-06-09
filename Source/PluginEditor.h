@@ -18,24 +18,25 @@
 //==============================================================================
 /**
 */
-class AugsSynthAudioProcessorEditor  : public AudioProcessorEditor
+class AugsSynthAudioProcessorEditor : public AudioProcessorEditor, public MidiKeyboardStateListener
 {
 public:
-    AugsSynthAudioProcessorEditor (AugsSynthAudioProcessor&);
+    AugsSynthAudioProcessorEditor (AugsSynthAudioProcessor& Processor, MidiKeyboardState& keyState);
     ~AugsSynthAudioProcessorEditor();
 
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
 
-private:
+    //MidiKeyboardStateListener
+    void handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
+    void handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float /*velocity*/) override;
 
+private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     AugsSynthAudioProcessor& processor;
-
-    Slider midiVolume; // [1]
-    MidiKeyboardState keyboardState;
+    MidiKeyboardState& mKeyState;
     MidiKeyboardComponent keyboardComponent;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AugsSynthAudioProcessorEditor)
