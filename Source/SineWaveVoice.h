@@ -3,6 +3,7 @@
 #include <JuceHeader.h>
 #include <SineWaveSound.h>
 #include <cmath>
+#include "maximilian.h"
 
 class SineWaveVoice : public SynthesiserVoice
 {
@@ -13,6 +14,10 @@ public:
 	void pitchWheelMoved(int newPitchWheelValue) override;
 	void controllerMoved(int controllerNumber, int newControllerValue) override;
 	void renderNextBlock(AudioBuffer< float >& outputBuffer, int startSample, int numSamples) override;
+	void setEnvelope(double a, double d, double s, double r);
 private:
-	double mCurrentAngle = 0.0, mAngleDelta = 0.0, mLevel = 0.0, mTailOff = 0.0;
+	double mFreq = 0.0;
+	double mLevel = 0.0;
+	maxiOsc mOsc;
+	maxiEnv mEnv;
 };

@@ -7,27 +7,23 @@ bool SineWaveVoice::canPlaySound(SynthesiserSound* sound)
 
 void SineWaveVoice::startNote(int midiNoteNumber, float velocity, SynthesiserSound*, int /*currentPitchWheelPosition*/)
 {
-    mCurrentAngle = 0.0;
-    mLevel = velocity * 0.15;
-    mTailOff = 0.0;
-    auto cyclesPerSecond = MidiMessage::getMidiNoteInHertz(midiNoteNumber);
-    auto cyclesPerSample = cyclesPerSecond / getSampleRate();
+    mLevel = velocity * 0.05;
+    mFreq = MidiMessage::getMidiNoteInHertz(midiNoteNumber);
+    mEnv.trigger = 1;
+}
 
-    mAngleDelta = cyclesPerSample * 2.0 * MathConstants<double>::pi;
+void SineWaveVoice::setEnvelope(double a, double d, double s, double r)
+{
+    mEnv.setAttack(a);
+    mEnv.setDecay(d);
+    mEnv.setSustain(s);
+    mEnv.setRelease(r);
 }
 
 void SineWaveVoice::stopNote(float /*velocity*/, bool allowTailOff)
 {
-    if (allowTailOff)
-    {
-        if (mTailOff == 0.0)
-            mTailOff = 1.0;
-    }
-    else
-    {
-        clearCurrentNote();
-        mAngleDelta = 0.0;
-    }
+    clearCurrentNote();
+    mEnv.trigger = 0;
 }
 
 void SineWaveVoice::pitchWheelMoved(int newPitchWheelValue) {}
@@ -36,43 +32,14 @@ void SineWaveVoice::controllerMoved(int controllerNumber, int newControllerValue
 
 void SineWaveVoice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
 {
-    if (mAngleDelta != 0.0)
+    for (int sample = 0; sample < numSamples; sample++)
     {
-        if (mTailOff > 0.0) //decay
+        double SampleVal = mOsc.saw(mFreq);
+        SampleVal = mEnv.adsr(SampleVal, mEnv.trigger);
+        for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
         {
-            while (--numSamples >= 0)//count down the samples
-            {
-                auto currentSample = (float)(sin(mCurrentAngle) * mLevel * mTailOff);
-
-                for (auto i = outputBuffer.getNumChannels(); --i >= 0;)
-                    outputBuffer.addSample(i, startSample, currentSample);
-
-                mCurrentAngle += mAngleDelta;
-                ++startSample;
-
-                mTailOff *= 0.99; // decay a bit
-
-                if (mTailOff <= 0.005)//round to 0
-                {
-                    clearCurrentNote(); // stop playing
-
-                    mAngleDelta = 0.0;
-                    break;
-                }
-            }
+            outputBuffer.addSample(channel, startSample, SampleVal);
         }
-        else//sustain
-        {
-            while (--numSamples >= 0) // [6]
-            {
-                auto currentSample = (float)(sin(mCurrentAngle) * mLevel);
-
-                for (auto i = outputBuffer.getNumChannels(); --i >= 0;)
-                    outputBuffer.addSample(i, startSample, currentSample);
-
-                mCurrentAngle += mAngleDelta;
-                ++startSample;
-            }
-        }
+        startSample++;
     }
 }

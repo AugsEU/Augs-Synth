@@ -11,6 +11,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "SineWaveVoice.h"
+#include "Defs.h"
 
 //==============================================================================
 AugsSynthAudioProcessor::AugsSynthAudioProcessor()
@@ -22,17 +23,34 @@ AugsSynthAudioProcessor::AugsSynthAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), mParamTree(*this, nullptr, "PARAMS", createParameterLayout())
 #endif
 {
-    for (auto i = 0; i < 4; ++i)                // [1]
+    for (auto i = 0; i < 4; ++i)                // Define voices
         mSynth.addVoice(new SineWaveVoice());
 
-    mSynth.addSound(new SineWaveSound());       // [2]
+    mSynth.addSound(new SineWaveSound());       // Add Sound
 }
 
 AugsSynthAudioProcessor::~AugsSynthAudioProcessor()
 {
+}
+
+AudioProcessorValueTreeState::ParameterLayout AugsSynthAudioProcessor::createParameterLayout()
+{
+ /*   std::vector<std::unique_ptr<AudioParameterParameter>> params;
+
+    params.push_back(std::make_unique<AudioParameterFloat>();
+
+    return { params.begin(), params.end() };*/
+    AudioProcessorValueTreeState::ParameterLayout layout;
+
+    layout.add(std::make_unique<AudioParameterFloat>((String)ATTACK_ID, (String)"Attack", 10.0f, 5000.0f, 0));
+    layout.add(std::make_unique<AudioParameterFloat>((String)DECAY_ID, (String)"Decay", 10.0f, 5000.0f, 0));
+    layout.add(std::make_unique<AudioParameterFloat>((String)SUS_ID, (String)"Sustain", 0.0f, 1.0f, 0));
+    layout.add(std::make_unique<AudioParameterFloat>((String)REL_ID, (String)"Release", 10.0f, 5000.0f, 0));
+
+    return layout;
 }
 
 //==============================================================================
@@ -139,8 +157,21 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
 {
     buffer.clear();
     mKeyState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
+
+    for (int i = 0; i < mSynth.getNumVoices(); i++)
+    {
+        auto* Voice = dynamic_cast<SineWaveVoice*>(mSynth.getVoice(i));
+        if (Voice)
+        {
+            double Attack = mParamTree.getParameterAsValue(ATTACK_ID).getValue();
+            double Decay = mParamTree.getParameterAsValue(DECAY_ID).getValue();
+            double Sustain = mParamTree.getParameterAsValue(SUS_ID).getValue();
+            double Release = mParamTree.getParameterAsValue(REL_ID).getValue();
+            Voice->setEnvelope(Attack, Decay, Sustain, Release);
+        }
+    }
+
     mSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-    
 }
 
 

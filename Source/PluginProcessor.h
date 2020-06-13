@@ -19,7 +19,7 @@ class AugsSynthAudioProcessor  : public AudioProcessor
 {
 public:
     float noteOnVel;
-
+    AudioProcessorValueTreeState mParamTree;
 
     //==============================================================================
     AugsSynthAudioProcessor();
@@ -60,8 +60,11 @@ public:
     //==============================================================================
     void UpdateKeyState(MidiKeyboardState& newState);
 private:
+    AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+
     Synthesiser mSynth;
     MidiKeyboardState mKeyState;
+
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AugsSynthAudioProcessor)
