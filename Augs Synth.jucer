@@ -27,11 +27,21 @@
         <FILE id="KJrcZj" name="stb_vorbis.c" compile="1" resource="0" file="../../Lib/cpp/Maximilian/stb_vorbis.c"/>
         <FILE id="hzI9Xo" name="stb_vorbis.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/stb_vorbis.h"/>
       </GROUP>
-      <FILE id="Ibfaq4" name="Defs.h" compile="0" resource="0" file="Source/Defs.h"/>
-      <FILE id="UFrg5A" name="SineWaveSound.h" compile="1" resource="0" file="Source/SineWaveSound.h"/>
-      <FILE id="wvQK4d" name="SineWaveVoice.cpp" compile="1" resource="0"
-            file="Source/SineWaveVoice.cpp"/>
-      <FILE id="MzvWE8" name="SineWaveVoice.h" compile="1" resource="0" file="Source/SineWaveVoice.h"/>
+      <FILE id="l81Afv" name="AugsSound.h" compile="0" resource="0" file="Source/AugsSound.h"/>
+      <FILE id="qHIS5a" name="AugsVoice.cpp" compile="1" resource="0" file="Source/AugsVoice.cpp"/>
+      <FILE id="rXWPqX" name="AugsVoice.h" compile="0" resource="0" file="Source/AugsVoice.h"/>
+      <FILE id="ZPkh1a" name="Main.h" compile="0" resource="0" file="Source/Main.h"/>
+      <FILE id="dBCWXj" name="EnvelopeGenerator.cpp" compile="1" resource="0"
+            file="../../../../Downloads/Synth/VST/wdl-ol/IPlugExamples/SpaceBass/EnvelopeGenerator.cpp"/>
+      <FILE id="OQtD4J" name="EnvelopeGenerator.h" compile="1" resource="0"
+            file="../../../../Downloads/Synth/VST/wdl-ol/IPlugExamples/SpaceBass/EnvelopeGenerator.h"/>
+      <FILE id="ii7Cnv" name="Oscillator.cpp" compile="1" resource="0" file="../../../../Downloads/Synth/VST/wdl-ol/IPlugExamples/SpaceBass/Oscillator.cpp"/>
+      <FILE id="Pi6R9d" name="Oscillator.h" compile="1" resource="0" file="../../../../Downloads/Synth/VST/wdl-ol/IPlugExamples/SpaceBass/Oscillator.h"/>
+      <FILE id="wEMh9l" name="PolyBLEPOscillator.cpp" compile="1" resource="0"
+            file="../../../../Downloads/Synth/VST/wdl-ol/IPlugExamples/SpaceBass/PolyBLEPOscillator.cpp"/>
+      <FILE id="jEg7wq" name="PolyBLEPOscillator.h" compile="1" resource="0"
+            file="../../../../Downloads/Synth/VST/wdl-ol/IPlugExamples/SpaceBass/PolyBLEPOscillator.h"/>
+      <FILE id="Ibfaq4" name="Defs.h" compile="1" resource="0" file="Source/Defs.h"/>
       <FILE id="G7dpMz" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="kJg7nM" name="PluginProcessor.h" compile="0" resource="0"

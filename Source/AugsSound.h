@@ -2,11 +2,11 @@
 
 #include <JuceHeader.h>
 
-class SineWaveSound : public SynthesiserSound
+class AugsSound : public SynthesiserSound
 {
 public:
 
-	SineWaveSound() {}
+	AugsSound() {}
 
 	bool appliesToNote(int midiNoteNumber) override
 	{

@@ -29,30 +29,43 @@ AugsSynthAudioProcessorEditor::~AugsSynthAudioProcessorEditor()
 
 void AugsSynthAudioProcessorEditor::InitGUI()
 {
+    getLookAndFeel().setColour(Slider::trackColourId, Colours::wheat);
+
     //Add on-screen keyboard
     addAndMakeVisible(keyboardComponent);
     mKeyState.addListener(this);//add listener
 
     //
     //Add Envelope Sliders
-    InitSlider(AttackSlider, 10.0, 5000.0, 1.0);
-    AtkSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, ATTACK_ID, AttackSlider);
+    InitSlider(AttackSlider, FloatParamProps[0].minVal, FloatParamProps[0].maxVal, 0.01);
+    AttackSlider.setTextValueSuffix("s");
+    AtkSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[0].ID, AttackSlider);
+    
+    InitSlider(DecaySlider, FloatParamProps[1].minVal, FloatParamProps[1].maxVal, 1.0);
+    DecaySlider.setTextValueSuffix("s");
+    DecaySliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[1].ID, DecaySlider);
 
-    InitSlider(DecaySlider, 10.0, 5000.0, 1.0);
-    DecaySliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, DECAY_ID, DecaySlider);
+    InitSlider(SustainSlider, FloatParamProps[2].minVal, FloatParamProps[2].maxVal, 0.01);
+    SusSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[2].ID, SustainSlider);
 
-    InitSlider(SustainSlider, 0.0, 1.0, 0.01);
-    SusSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, SUS_ID, SustainSlider);
-
-    InitSlider(ReleaseSlider, 10.0, 5000.0, 1.0);
-    RelSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, REL_ID, ReleaseSlider);
+    InitSlider(ReleaseSlider, FloatParamProps[3].minVal, FloatParamProps[3].maxVal, 0.01);
+    ReleaseSlider.setTextValueSuffix("s");
+    RelSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[3].ID, ReleaseSlider);
+    
+    //
+    //Volume slider
+    InitSlider(VolumeSlider, FloatParamProps[4].minVal, FloatParamProps[4].maxVal, 0.01, Slider::SliderStyle::LinearVertical);
+    VolumeSlider.setPopupDisplayEnabled(false,false,nullptr);
+    VolSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[4].ID, VolumeSlider);
+    
 }
 
-void AugsSynthAudioProcessorEditor::InitSlider(Slider& MySlider, double Min, double Max, double Increment)
+void AugsSynthAudioProcessorEditor::InitSlider(Slider& MySlider, double Min, double Max, double Increment, Slider::SliderStyle style)
 {
     addAndMakeVisible(MySlider);
     MySlider.setRange(Min, Max, Increment); 
-    MySlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
+    MySlider.setSliderStyle(style);
+    MySlider.setPopupDisplayEnabled(true, true, nullptr);
     MySlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
 }
 
@@ -74,6 +87,11 @@ void AugsSynthAudioProcessorEditor::paint (Graphics& g)
     g.drawSingleLineText("D", GUI_SPACING + 4, GUI_SPACING * 3 + 4);
     g.drawSingleLineText("S", GUI_SPACING + 4, GUI_SPACING * 4 + 4);
     g.drawSingleLineText("R", GUI_SPACING + 4, GUI_SPACING * 5 + 4);
+
+    g.setColour(Colours::darkgrey);
+    g.drawRect(195, 0, 50, 120);
+    g.setColour(Colours::wheat);
+    g.drawSingleLineText("Vol", 15 + 195, GUI_SPACING);
 }
 
 void AugsSynthAudioProcessorEditor::resized()
@@ -84,11 +102,13 @@ void AugsSynthAudioProcessorEditor::resized()
     int KeyHeight = 100;
     keyboardComponent.setBounds(GUI_SPACING, getHeight()- GUI_SPACING- KeyHeight, getWidth() - GUI_SPACING*2, KeyHeight);
 
-    int SliderWidth = (int)(getWidth() / 6);
+    int SliderWidth = (int)(getWidth() / 6);//ADSR Sliders
     AttackSlider.setBounds(2*GUI_SPACING, GUI_SPACING+10, SliderWidth, GUI_SPACING);
     DecaySlider.setBounds(2 * GUI_SPACING, GUI_SPACING*2 + 10, SliderWidth, GUI_SPACING);
     SustainSlider.setBounds(2 * GUI_SPACING, GUI_SPACING*3 + 10, SliderWidth, GUI_SPACING);
     ReleaseSlider.setBounds(2 * GUI_SPACING, GUI_SPACING*4 + 10, SliderWidth, GUI_SPACING);
+
+    VolumeSlider.setBounds(190 + GUI_SPACING, 20, GUI_SPACING, 100);
 }
 
 void AugsSynthAudioProcessorEditor::handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) 

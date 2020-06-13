@@ -12,7 +12,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "Defs.h"
+#include "Main.h"
 
 #define GUI_SPACING 20
 #define SLIDER_TXT_WIDTH (int)(GUI_SPACING*2.75)
@@ -37,7 +37,7 @@ public:
 
 private:
     void InitGUI();
-    void InitSlider(Slider& MySlider, double Min, double Max, double Increment = 0.0);
+    void InitSlider(Slider& MySlider, double Min, double Max, double Increment = 0.0, Slider::SliderStyle style = Slider::SliderStyle::LinearHorizontal);
 
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
@@ -52,11 +52,15 @@ private:
     Slider DecaySlider;
     Slider SustainSlider;
     Slider ReleaseSlider;
+
+    //Volume Slider
+    Slider VolumeSlider;
 public:
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> AtkSliderAttach;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> DecaySliderAttach;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> SusSliderAttach;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> RelSliderAttach;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> VolSliderAttach;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AugsSynthAudioProcessorEditor)
 };

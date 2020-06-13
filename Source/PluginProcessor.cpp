@@ -10,8 +10,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "SineWaveVoice.h"
-#include "Defs.h"
+#include "Main.h"
 
 //==============================================================================
 AugsSynthAudioProcessor::AugsSynthAudioProcessor()
@@ -27,9 +26,9 @@ AugsSynthAudioProcessor::AugsSynthAudioProcessor()
 #endif
 {
     for (auto i = 0; i < 4; ++i)                // Define voices
-        mSynth.addVoice(new SineWaveVoice());
+        mSynth.addVoice(new AugsVoice());
 
-    mSynth.addSound(new SineWaveSound());       // Add Sound
+    mSynth.addSound(new AugsSound());       // Add Sound
 }
 
 AugsSynthAudioProcessor::~AugsSynthAudioProcessor()
@@ -44,11 +43,12 @@ AudioProcessorValueTreeState::ParameterLayout AugsSynthAudioProcessor::createPar
 
     return { params.begin(), params.end() };*/
     AudioProcessorValueTreeState::ParameterLayout layout;
-
-    layout.add(std::make_unique<AudioParameterFloat>((String)ATTACK_ID, (String)"Attack", 10.0f, 5000.0f, 0));
-    layout.add(std::make_unique<AudioParameterFloat>((String)DECAY_ID, (String)"Decay", 10.0f, 5000.0f, 0));
-    layout.add(std::make_unique<AudioParameterFloat>((String)SUS_ID, (String)"Sustain", 0.0f, 1.0f, 0));
-    layout.add(std::make_unique<AudioParameterFloat>((String)REL_ID, (String)"Release", 10.0f, 5000.0f, 0));
+    for (int i = 0; i < NUM_FLOAT_PARAMS; i++)//add float parameters
+    {
+        NormalisableRange<float> Range = NormalisableRange<float>(FloatParamProps[i].minVal, FloatParamProps[i].maxVal);
+        Range.skew = FloatParamProps[i].skewFactor;
+        layout.add(std::make_unique<AudioParameterFloat>(FloatParamProps[i].ID, FloatParamProps[i].Name, Range, FloatParamProps[i].defaultVal));
+    }
 
     return layout;
 }
@@ -160,14 +160,17 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
 
     for (int i = 0; i < mSynth.getNumVoices(); i++)
     {
-        auto* Voice = dynamic_cast<SineWaveVoice*>(mSynth.getVoice(i));
+        auto* Voice = dynamic_cast<AugsVoice*>(mSynth.getVoice(i));
         if (Voice)
         {
-            double Attack = mParamTree.getParameterAsValue(ATTACK_ID).getValue();
-            double Decay = mParamTree.getParameterAsValue(DECAY_ID).getValue();
-            double Sustain = mParamTree.getParameterAsValue(SUS_ID).getValue();
-            double Release = mParamTree.getParameterAsValue(REL_ID).getValue();
+            double Attack = mParamTree.getParameterAsValue(FloatParamProps[0].ID).getValue();
+            double Decay = mParamTree.getParameterAsValue(FloatParamProps[1].ID).getValue();
+            double Sustain = mParamTree.getParameterAsValue(FloatParamProps[2].ID).getValue();
+            double Release = mParamTree.getParameterAsValue(FloatParamProps[3].ID).getValue();
             Voice->setEnvelope(Attack, Decay, Sustain, Release);
+
+            double Volume = mParamTree.getParameterAsValue(FloatParamProps[4].ID).getValue();
+            Voice->setVolume(Volume);
         }
     }
 
