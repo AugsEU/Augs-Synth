@@ -7,4 +7,4 @@ Augs Synth is a VST plugin made with the JUCE framework. So far it has:
 * ADSR envelope
 
 
-![Picture of the synth so far:](https://i.imgur.com/V8YxFaz.png)
+![Picture of the synth so far:](https://i.imgur.com/MmAkN7r.png)
