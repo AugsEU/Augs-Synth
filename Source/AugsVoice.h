@@ -14,13 +14,13 @@ public:
 	void controllerMoved(int controllerNumber, int newControllerValue) override;
 	void renderNextBlock(AudioBuffer< float >& outputBuffer, int startSample, int numSamples) override;
 	void setEnvelope(double a, double d, double s, double r);
-	void setVolume(double Vol);
-	AugsVoice() : mVolume(0.05), mVelocity(0.0)
+	void setOsc(Oscillator::OscillatorMode mode);
+	AugsVoice() :mVelocity(0.0), minimumValue(0.0000001)
 	{}
 	~AugsVoice()
 	{}
 private:
-	double mVolume;
+	const double minimumValue;
 	double mVelocity;
 	PolyBLEPOscillator mOsc;
 	EnvelopeGenerator mEnv;

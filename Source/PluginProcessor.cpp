@@ -25,7 +25,7 @@ AugsSynthAudioProcessor::AugsSynthAudioProcessor()
                        ), mParamTree(*this, nullptr, "PARAMS", createParameterLayout())
 #endif
 {
-    for (auto i = 0; i < 4; ++i)                // Define voices
+    for (auto i = 0; i < 8; ++i)                // Define voices
         mSynth.addVoice(new AugsVoice());
 
     mSynth.addSound(new AugsSound());       // Add Sound
@@ -158,23 +158,69 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
     buffer.clear();
     mKeyState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
 
+    double Attack = mParamTree.getParameterAsValue(FloatParamProps[0].ID).getValue();
+    double Decay = mParamTree.getParameterAsValue(FloatParamProps[1].ID).getValue();
+    double Sustain = mParamTree.getParameterAsValue(FloatParamProps[2].ID).getValue();
+    double Release = mParamTree.getParameterAsValue(FloatParamProps[3].ID).getValue();
+    int Mode = mParamTree.getParameterAsValue(FloatParamProps[5].ID).getValue();
+
     for (int i = 0; i < mSynth.getNumVoices(); i++)
     {
         auto* Voice = dynamic_cast<AugsVoice*>(mSynth.getVoice(i));
         if (Voice)
         {
-            double Attack = mParamTree.getParameterAsValue(FloatParamProps[0].ID).getValue();
-            double Decay = mParamTree.getParameterAsValue(FloatParamProps[1].ID).getValue();
-            double Sustain = mParamTree.getParameterAsValue(FloatParamProps[2].ID).getValue();
-            double Release = mParamTree.getParameterAsValue(FloatParamProps[3].ID).getValue();
             Voice->setEnvelope(Attack, Decay, Sustain, Release);
-
-            double Volume = mParamTree.getParameterAsValue(FloatParamProps[4].ID).getValue();
-            Voice->setVolume(Volume);
+            Voice->setOsc((Oscillator::OscillatorMode)Mode);
         }
     }
 
     mSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+
+    float InnerDist = (float)mParamTree.getParameterAsValue(FloatParamProps[6].ID).getValue();
+    float OuterDist = 1-(float)mParamTree.getParameterAsValue(FloatParamProps[7].ID).getValue();
+    double Volume = mParamTree.getParameterAsValue(FloatParamProps[4].ID).getValue();
+
+    for (int sample = 0; sample < buffer.getNumSamples(); sample++)
+    {
+        for (int channel = 0; channel < buffer.getNumChannels(); channel++)
+        {
+            float MySample = buffer.getSample(channel, sample);
+
+            ApplyDistort(MySample, InnerDist, OuterDist);
+
+            MySample *= Volume;
+            buffer.setSample(channel, sample, MySample);
+        }
+    }
+}
+
+void AugsSynthAudioProcessor::ApplyDistort(float& Sample, float& Inner, float& Outer)
+{
+    //Apply Inner
+    double InnerPower = 1 - (double)Inner;
+    if (Sample >= 0.0f)
+    {
+        Sample = pow(Sample, InnerPower);
+    }
+    else if (Sample < 0.0)
+    {
+        Sample = -pow(-Sample, InnerPower);
+    }
+
+
+
+    //Apply Outer
+    if (Sample > Outer)
+    {
+        Sample = Outer;
+    }
+    else if (Sample < -Outer)
+    {
+        Sample = -Outer;
+    }
+
+    Sample /= Outer;
+
 }
 
 

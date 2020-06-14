@@ -58,6 +58,18 @@ void AugsSynthAudioProcessorEditor::InitGUI()
     VolumeSlider.setPopupDisplayEnabled(false,false,nullptr);
     VolSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[4].ID, VolumeSlider);
     
+    //
+    //Osc selection
+    addAndMakeVisible(OscSelect);
+    OscSelect.addItemList({"Sine","Saw","Square","Triangle"},1);
+    OscSelectAttach = std::make_unique<AudioProcessorValueTreeState::ComboBoxAttachment>(processor.mParamTree, FloatParamProps[5].ID, OscSelect);
+
+    //distortion
+    InitSlider(InnerDistortionSlider, FloatParamProps[6].minVal, FloatParamProps[6].maxVal);
+    InDistortAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[6].ID, InnerDistortionSlider);
+
+    InitSlider(OuterDistortionSlider, FloatParamProps[7].minVal, FloatParamProps[7].maxVal);
+    OutDistortAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[7].ID, OuterDistortionSlider);
 }
 
 void AugsSynthAudioProcessorEditor::InitSlider(Slider& MySlider, double Min, double Max, double Increment, Slider::SliderStyle style)
@@ -78,7 +90,7 @@ void AugsSynthAudioProcessorEditor::paint (Graphics& g)
     // set the font size and draw text to the screen
     g.setFont(15.0f);
 
-
+    //ADSR
     g.setColour(Colours::darkgrey);
     g.drawRect(0, 0, 195, 120);
     g.setColour(Colours::wheat);
@@ -88,10 +100,20 @@ void AugsSynthAudioProcessorEditor::paint (Graphics& g)
     g.drawSingleLineText("S", GUI_SPACING + 4, GUI_SPACING * 4 + 4);
     g.drawSingleLineText("R", GUI_SPACING + 4, GUI_SPACING * 5 + 4);
 
+    //Volume
     g.setColour(Colours::darkgrey);
     g.drawRect(195, 0, 50, 120);
     g.setColour(Colours::wheat);
     g.drawSingleLineText("Vol", 15 + 195, GUI_SPACING);
+
+    //Distortion
+    g.setColour(Colours::darkgrey);
+    g.drawRect(0, 470, 195, 80);
+    g.setColour(Colours::wheat);
+    g.drawSingleLineText("Distortion", 17, GUI_SPACING * 1 + 472);
+    g.drawSingleLineText("In", 17, GUI_SPACING * 2 + 473);
+    g.drawSingleLineText("Out", 17, GUI_SPACING * 3 + 473);
+
 }
 
 void AugsSynthAudioProcessorEditor::resized()
@@ -109,6 +131,11 @@ void AugsSynthAudioProcessorEditor::resized()
     ReleaseSlider.setBounds(2 * GUI_SPACING, GUI_SPACING*4 + 10, SliderWidth, GUI_SPACING);
 
     VolumeSlider.setBounds(190 + GUI_SPACING, 20, GUI_SPACING, 100);
+
+    OscSelect.setBounds(245, 0, 90, 20);
+
+    InnerDistortionSlider.setBounds(2 * GUI_SPACING, 500, SliderWidth, GUI_SPACING);
+    OuterDistortionSlider.setBounds(2 * GUI_SPACING, 500 + GUI_SPACING, SliderWidth, GUI_SPACING);
 }
 
 void AugsSynthAudioProcessorEditor::handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) 

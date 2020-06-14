@@ -61,6 +61,8 @@ public:
     //==============================================================================
     void UpdateKeyState(MidiKeyboardState& newState);
 private:
+    void ApplyDistort(float& Sample, float& Inner, float& Outer);
+
     AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
     Synthesiser mSynth;

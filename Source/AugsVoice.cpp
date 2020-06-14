@@ -20,9 +20,9 @@ void AugsVoice::setEnvelope(double a, double d, double s, double r)
     mEnv.setStageValue(EnvelopeGenerator::EnvelopeStage::ENVELOPE_STAGE_RELEASE, r);
 }
 
-void  AugsVoice::setVolume(double Vol)
+void AugsVoice::setOsc(Oscillator::OscillatorMode mode)
 {
-    mVolume = Vol;
+    mOsc.setMode(mode);
 }
 
 void AugsVoice::stopNote(float /*velocity*/, bool allowTailOff)
@@ -49,8 +49,14 @@ void AugsVoice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSampl
     for (int sample = 0; sample < numSamples; sample++)
     {
         double SampleVal = mOsc.nextSample();
-        SampleVal = SampleVal * mEnv.nextSample() * mVelocity * mVolume;
-        if(mEnv.getCurrentStage() == EnvelopeGenerator::EnvelopeStage::ENVELOPE_STAGE_OFF) clearCurrentNote();
+        double EnvValue = mEnv.nextSample();
+        SampleVal = SampleVal * EnvValue * mVelocity;
+        if ((mEnv.getCurrentStage() == EnvelopeGenerator::EnvelopeStage::ENVELOPE_STAGE_OFF) || (EnvValue < minimumValue))
+        {
+            clearCurrentNote();
+            mEnv.enterStage(EnvelopeGenerator::EnvelopeStage::ENVELOPE_STAGE_OFF);
+            SampleVal = 0;
+        }
         for (int channel = 0; channel < outputBuffer.getNumChannels(); channel++)
         {
             outputBuffer.addSample(channel, startSample, SampleVal);

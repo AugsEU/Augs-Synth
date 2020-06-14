@@ -55,12 +55,26 @@ private:
 
     //Volume Slider
     Slider VolumeSlider;
+
+    //OscCombo
+    ComboBox OscSelect;
+
+    //Distortion
+    Slider InnerDistortionSlider;
+    Slider OuterDistortionSlider;
+
 public:
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> AtkSliderAttach;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> DecaySliderAttach;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> SusSliderAttach;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> RelSliderAttach;
+
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> VolSliderAttach;
+
+    std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> OscSelectAttach;
+
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> InDistortAttach;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> OutDistortAttach;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AugsSynthAudioProcessorEditor)
 };
