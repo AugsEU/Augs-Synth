@@ -40,7 +40,7 @@ void AugsSynthAudioProcessorEditor::InitGUI()
     InitSlider(AttackSlider, FloatParamProps[0].minVal, FloatParamProps[0].maxVal, 0.01);
     AttackSlider.setTextValueSuffix("s");
     AtkSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[0].ID, AttackSlider);
-    
+
     InitSlider(DecaySlider, FloatParamProps[1].minVal, FloatParamProps[1].maxVal, 1.0);
     DecaySlider.setTextValueSuffix("s");
     DecaySliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[1].ID, DecaySlider);
@@ -51,25 +51,37 @@ void AugsSynthAudioProcessorEditor::InitGUI()
     InitSlider(ReleaseSlider, FloatParamProps[3].minVal, FloatParamProps[3].maxVal, 0.01);
     ReleaseSlider.setTextValueSuffix("s");
     RelSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[3].ID, ReleaseSlider);
-    
+
     //
     //Volume slider
     InitSlider(VolumeSlider, FloatParamProps[4].minVal, FloatParamProps[4].maxVal, 0.01, Slider::SliderStyle::LinearVertical);
-    VolumeSlider.setPopupDisplayEnabled(false,false,nullptr);
+    VolumeSlider.setPopupDisplayEnabled(false, false, nullptr);
     VolSliderAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[4].ID, VolumeSlider);
-    
+
     //
     //Osc selection
     addAndMakeVisible(OscSelect);
-    OscSelect.addItemList({"Sine","Saw","Square","Triangle"},1);
+    OscSelect.addItemList({ "Sine","Saw","Square","Triangle" }, 1);
     OscSelectAttach = std::make_unique<AudioProcessorValueTreeState::ComboBoxAttachment>(processor.mParamTree, FloatParamProps[5].ID, OscSelect);
 
     //distortion
-    InitSlider(InnerDistortionSlider, FloatParamProps[6].minVal, FloatParamProps[6].maxVal);
-    InDistortAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[6].ID, InnerDistortionSlider);
+    InitSlider(PowerDistortionSlider, FloatParamProps[6].minVal, FloatParamProps[6].maxVal);
+    PowDistortAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[6].ID, PowerDistortionSlider);
 
-    InitSlider(OuterDistortionSlider, FloatParamProps[7].minVal, FloatParamProps[7].maxVal);
-    OutDistortAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[7].ID, OuterDistortionSlider);
+    InitSlider(TrimDistortionSlider, FloatParamProps[7].minVal, FloatParamProps[7].maxVal);
+    TrimDistortAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[7].ID, TrimDistortionSlider);
+
+    //Filter
+    addAndMakeVisible(FilterSelect);
+    FilterSelect.addItemList({ "Low pass", "High pass", "Band pass", "Off" }, 1);
+    FilterSelectAttach = std::make_unique<AudioProcessorValueTreeState::ComboBoxAttachment>(processor.mParamTree, FloatParamProps[8].ID, FilterSelect);
+
+    InitSlider(CutOffSlider, FloatParamProps[9].minVal, FloatParamProps[9].maxVal);
+    CutOffAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[9].ID, CutOffSlider);
+
+    InitSlider(ResonanceSlider, FloatParamProps[10].minVal, FloatParamProps[10].maxVal);
+    ResAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.mParamTree, FloatParamProps[10].ID, ResonanceSlider);
+
 }
 
 void AugsSynthAudioProcessorEditor::InitSlider(Slider& MySlider, double Min, double Max, double Increment, Slider::SliderStyle style)
@@ -111,8 +123,16 @@ void AugsSynthAudioProcessorEditor::paint (Graphics& g)
     g.drawRect(0, 470, 195, 80);
     g.setColour(Colours::wheat);
     g.drawSingleLineText("Distortion", 17, GUI_SPACING * 1 + 472);
-    g.drawSingleLineText("In", 17, GUI_SPACING * 2 + 473);
-    g.drawSingleLineText("Out", 17, GUI_SPACING * 3 + 473);
+    g.drawSingleLineText("Pow", 17, GUI_SPACING * 2 + 473);
+    g.drawSingleLineText("Trim", 17, GUI_SPACING * 3 + 473);
+
+    //ADSR
+    g.setColour(Colours::darkgrey);
+    g.drawRect(340, 0, 195, 80);
+    g.setColour(Colours::wheat);
+    g.drawSingleLineText("Filter", 335 + GUI_SPACING, GUI_SPACING);
+    g.drawSingleLineText("Cut", GUI_SPACING + 334, GUI_SPACING * 2 + 4);
+    g.drawSingleLineText("Res", GUI_SPACING + 334, GUI_SPACING * 3 + 4);
 
 }
 
@@ -130,12 +150,20 @@ void AugsSynthAudioProcessorEditor::resized()
     SustainSlider.setBounds(2 * GUI_SPACING, GUI_SPACING*3 + 10, SliderWidth, GUI_SPACING);
     ReleaseSlider.setBounds(2 * GUI_SPACING, GUI_SPACING*4 + 10, SliderWidth, GUI_SPACING);
 
+    //Volume
     VolumeSlider.setBounds(190 + GUI_SPACING, 20, GUI_SPACING, 100);
 
-    OscSelect.setBounds(245, 0, 90, 20);
+    //Osc selector
+    OscSelect.setBounds(245, 0, 95, 20);
 
-    InnerDistortionSlider.setBounds(2 * GUI_SPACING, 500, SliderWidth, GUI_SPACING);
-    OuterDistortionSlider.setBounds(2 * GUI_SPACING, 500 + GUI_SPACING, SliderWidth, GUI_SPACING);
+    //distortion
+    PowerDistortionSlider.setBounds(2 * GUI_SPACING, 500, SliderWidth, GUI_SPACING);
+    TrimDistortionSlider.setBounds(2 * GUI_SPACING, 500 + GUI_SPACING, SliderWidth, GUI_SPACING);
+
+    //Filter
+    FilterSelect.setBounds(245, 21, 95, 20);
+    CutOffSlider.setBounds(380, GUI_SPACING * 1 + 10, SliderWidth, GUI_SPACING);
+    ResonanceSlider.setBounds(380, GUI_SPACING * 2 + 10, SliderWidth, GUI_SPACING);
 }
 
 void AugsSynthAudioProcessorEditor::handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) 

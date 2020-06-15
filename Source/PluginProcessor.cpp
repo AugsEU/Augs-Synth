@@ -10,7 +10,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "Main.h"
+#include "AugsVoice.h"
 
 //==============================================================================
 AugsSynthAudioProcessor::AugsSynthAudioProcessor()
@@ -162,7 +162,10 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
     double Decay = mParamTree.getParameterAsValue(FloatParamProps[1].ID).getValue();
     double Sustain = mParamTree.getParameterAsValue(FloatParamProps[2].ID).getValue();
     double Release = mParamTree.getParameterAsValue(FloatParamProps[3].ID).getValue();
-    int Mode = mParamTree.getParameterAsValue(FloatParamProps[5].ID).getValue();
+    int OscMode = mParamTree.getParameterAsValue(FloatParamProps[5].ID).getValue();
+    int FilterMode = mParamTree.getParameterAsValue(FloatParamProps[8].ID).getValue();
+    double FilterCut = mParamTree.getParameterAsValue(FloatParamProps[9].ID).getValue();
+    double FilterRes = mParamTree.getParameterAsValue(FloatParamProps[10].ID).getValue();
 
     for (int i = 0; i < mSynth.getNumVoices(); i++)
     {
@@ -170,14 +173,15 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
         if (Voice)
         {
             Voice->setEnvelope(Attack, Decay, Sustain, Release);
-            Voice->setOsc((Oscillator::OscillatorMode)Mode);
+            Voice->setOsc(static_cast<Oscillator::OscillatorMode>(OscMode));
+            Voice->setFilter(FilterCut, FilterRes, FilterMode);
         }
     }
 
     mSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
-    float InnerDist = (float)mParamTree.getParameterAsValue(FloatParamProps[6].ID).getValue();
-    float OuterDist = 1-(float)mParamTree.getParameterAsValue(FloatParamProps[7].ID).getValue();
+    float PowDist = (float)mParamTree.getParameterAsValue(FloatParamProps[6].ID).getValue();
+    float TrimDist = 1-(float)mParamTree.getParameterAsValue(FloatParamProps[7].ID).getValue();
     double Volume = mParamTree.getParameterAsValue(FloatParamProps[4].ID).getValue();
 
     for (int sample = 0; sample < buffer.getNumSamples(); sample++)
@@ -186,7 +190,7 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
         {
             float MySample = buffer.getSample(channel, sample);
 
-            ApplyDistort(MySample, InnerDist, OuterDist);
+            ApplyDistort(MySample, PowDist, TrimDist);
 
             MySample *= Volume;
             buffer.setSample(channel, sample, MySample);
@@ -194,32 +198,31 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
     }
 }
 
-void AugsSynthAudioProcessor::ApplyDistort(float& Sample, float& Inner, float& Outer)
+void AugsSynthAudioProcessor::ApplyDistort(float& Sample, float& Power, float& Trim)
 {
-    //Apply Inner
-    double InnerPower = 1 - (double)Inner;
+    //Apply Power
     if (Sample >= 0.0f)
     {
-        Sample = pow(Sample, InnerPower);
+        Sample = pow(Sample, Power);
     }
     else if (Sample < 0.0)
     {
-        Sample = -pow(-Sample, InnerPower);
+        Sample = -pow(-Sample, Power);
     }
 
 
 
     //Apply Outer
-    if (Sample > Outer)
+    if (Sample > Trim)
     {
-        Sample = Outer;
+        Sample = Trim;
     }
-    else if (Sample < -Outer)
+    else if (Sample < -Trim)
     {
-        Sample = -Outer;
+        Sample = -Trim;
     }
 
-    Sample /= Outer;
+    Sample /= Trim;
 
 }
 

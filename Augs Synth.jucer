@@ -27,10 +27,11 @@
         <FILE id="KJrcZj" name="stb_vorbis.c" compile="1" resource="0" file="../../Lib/cpp/Maximilian/stb_vorbis.c"/>
         <FILE id="hzI9Xo" name="stb_vorbis.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/stb_vorbis.h"/>
       </GROUP>
+      <FILE id="e7qASm" name="AugsFilter.h" compile="0" resource="0" file="Source/AugsFilter.h"/>
+      <FILE id="lZayIM" name="AugsFilter.cpp" compile="1" resource="0" file="Source/AugsFilter.cpp"/>
       <FILE id="l81Afv" name="AugsSound.h" compile="0" resource="0" file="Source/AugsSound.h"/>
       <FILE id="qHIS5a" name="AugsVoice.cpp" compile="1" resource="0" file="Source/AugsVoice.cpp"/>
       <FILE id="rXWPqX" name="AugsVoice.h" compile="0" resource="0" file="Source/AugsVoice.h"/>
-      <FILE id="ZPkh1a" name="Main.h" compile="0" resource="0" file="Source/Main.h"/>
       <FILE id="dBCWXj" name="EnvelopeGenerator.cpp" compile="1" resource="0"
             file="../../../../Downloads/Synth/VST/wdl-ol/IPlugExamples/SpaceBass/EnvelopeGenerator.cpp"/>
       <FILE id="OQtD4J" name="EnvelopeGenerator.h" compile="1" resource="0"

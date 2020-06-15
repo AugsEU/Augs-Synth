@@ -2,7 +2,13 @@
 
 #include <JuceHeader.h>
 #include <cmath>
-#include "Main.h"
+
+#include "Oscillator.h"
+#include "PolyBLEPOscillator.h"
+#include "EnvelopeGenerator.h"
+#include "AugsSound.h"
+#include "Defs.h"
+#include "AugsFilter.h"
 
 class AugsVoice : public SynthesiserVoice
 {
@@ -14,7 +20,13 @@ public:
 	void controllerMoved(int controllerNumber, int newControllerValue) override;
 	void renderNextBlock(AudioBuffer< float >& outputBuffer, int startSample, int numSamples) override;
 	void setEnvelope(double a, double d, double s, double r);
-	void setOsc(Oscillator::OscillatorMode mode);
+	inline void setOsc(Oscillator::OscillatorMode mode) { mOsc.setMode(mode); }
+	inline void setFilter(double Freq, double Res, int Mode) 
+	{
+		mFilter.setFreq(Freq); 
+		mFilter.setRes(Res); 
+		mFilter.setMode(static_cast<AugsFilter::FilterMode>(Mode));
+	}
 	AugsVoice() :mVelocity(0.0), minimumValue(0.0000001)
 	{}
 	~AugsVoice()
@@ -22,6 +34,9 @@ public:
 private:
 	const double minimumValue;
 	double mVelocity;
+
 	PolyBLEPOscillator mOsc;
+
+	AugsFilter mFilter;
 	EnvelopeGenerator mEnv;
 };

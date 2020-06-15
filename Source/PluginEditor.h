@@ -12,7 +12,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "Main.h"
+#include "Defs.h"
 
 #define GUI_SPACING 20
 #define SLIDER_TXT_WIDTH (int)(GUI_SPACING*2.75)
@@ -60,21 +60,32 @@ private:
     ComboBox OscSelect;
 
     //Distortion
-    Slider InnerDistortionSlider;
-    Slider OuterDistortionSlider;
+    Slider PowerDistortionSlider;
+    Slider TrimDistortionSlider;
+
+    //Filter settings
+    ComboBox FilterSelect;
+    Slider CutOffSlider;
+    Slider ResonanceSlider;
 
 public:
+    //ADSR
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> AtkSliderAttach;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> DecaySliderAttach;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> SusSliderAttach;
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> RelSliderAttach;
 
+    //Volume
     std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> VolSliderAttach;
-
+    //Oscillator
     std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> OscSelectAttach;
-
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> InDistortAttach;
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> OutDistortAttach;
+    //Distortion
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> PowDistortAttach;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> TrimDistortAttach;
+    //Filter
+    std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> FilterSelectAttach;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> CutOffAttach;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> ResAttach;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AugsSynthAudioProcessorEditor)
 };
