@@ -4,6 +4,16 @@
               pluginVST3Category="Instrument,Synth" pluginCharacteristicsValue="pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn">
   <MAINGROUP id="PhCh5B" name="Augs Synth">
     <GROUP id="{8A646E7D-788C-F100-CDB0-4BAEF60D8B7F}" name="Source">
+      <GROUP id="{3AB4B9AA-2A1D-6F00-4D3F-E467A4223398}" name="Filters">
+        <FILE id="Z0ZzTb" name="RecursiveFilter.cpp" compile="1" resource="0"
+              file="Source/RecursiveFilter.cpp"/>
+        <FILE id="X4NMww" name="RecursiveFilter.h" compile="0" resource="0"
+              file="Source/RecursiveFilter.h"/>
+        <FILE id="pTPW2N" name="SinglePoleFilter.cpp" compile="1" resource="0"
+              file="Source/SinglePoleFilter.cpp"/>
+        <FILE id="eQfowu" name="SinglePoleFilter.h" compile="0" resource="0"
+              file="Source/SinglePoleFilter.h"/>
+      </GROUP>
       <GROUP id="{0C05AEFD-8CA5-8AA9-0683-1EDB5F03BAC8}" name="Maximilian">
         <GROUP id="{5A28147C-CF13-2CA7-D3D8-1653BA8BEA6E}" name="libs">
           <FILE id="cRPRsx" name="fft.cpp" compile="1" resource="0" file="../../Lib/cpp/Maximilian/libs/fft.cpp"/>
@@ -27,6 +37,7 @@
         <FILE id="KJrcZj" name="stb_vorbis.c" compile="1" resource="0" file="../../Lib/cpp/Maximilian/stb_vorbis.c"/>
         <FILE id="hzI9Xo" name="stb_vorbis.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/stb_vorbis.h"/>
       </GROUP>
+      <FILE id="KWIsBS" name="Constants.h" compile="0" resource="0" file="Source/Constants.h"/>
       <FILE id="e7qASm" name="AugsFilter.h" compile="0" resource="0" file="Source/AugsFilter.h"/>
       <FILE id="lZayIM" name="AugsFilter.cpp" compile="1" resource="0" file="Source/AugsFilter.cpp"/>
       <FILE id="l81Afv" name="AugsSound.h" compile="0" resource="0" file="Source/AugsSound.h"/>

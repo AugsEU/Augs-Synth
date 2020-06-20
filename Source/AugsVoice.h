@@ -21,10 +21,9 @@ public:
 	void renderNextBlock(AudioBuffer< float >& outputBuffer, int startSample, int numSamples) override;
 	void setEnvelope(double a, double d, double s, double r);
 	inline void setOsc(Oscillator::OscillatorMode mode) { mOsc.setMode(mode); }
-	inline void setFilter(double Freq, double Res, int Mode) 
+	inline void setFilter(double Freq, double Res, int Mode)
 	{
-		mFilter.setFreq(Freq); 
-		mFilter.setRes(Res); 
+		mFilter.setFreqAndRes(Freq, Res);
 		mFilter.setMode(static_cast<AugsFilter::FilterMode>(Mode));
 	}
 	AugsVoice() :mVelocity(0.0), minimumValue(0.0000001)

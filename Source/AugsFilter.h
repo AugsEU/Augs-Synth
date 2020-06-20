@@ -9,7 +9,7 @@
 */
 
 #pragma once
-#include "maximilian.h"
+#include "SinglePoleFilter.h"
 
 
 class AugsFilter
@@ -23,9 +23,8 @@ public:
 		FILTER_OFF,
 		kNumOscillatorModes
 	};
-	inline void setFreq(double newFreq) { mFreq = newFreq; }
-	inline void setRes(double newRes) { mRes = newRes; };
-	inline void setMode(FilterMode newMode) { mMode = newMode; }
+	void setFreqAndRes(double newFreq, double newRes);
+	void setMode(FilterMode newMode) { mMode = newMode; }
 	void ProcessSample(double& Sample);
 
 	AugsFilter() : mMode(FILTER_OFF), mFreq(0.0), mRes(1.0) {}
@@ -34,5 +33,5 @@ private:
 	FilterMode mMode;
 	double mFreq;
 	double mRes;
-	maxiFilter mFilter;
+	SinglePoleFilter mFilter;
 };

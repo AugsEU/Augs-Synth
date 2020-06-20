@@ -11,6 +11,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "AugsVoice.h"
+#include "Defs.h"
 
 //==============================================================================
 AugsSynthAudioProcessor::AugsSynthAudioProcessor()
@@ -25,7 +26,7 @@ AugsSynthAudioProcessor::AugsSynthAudioProcessor()
                        ), mParamTree(*this, nullptr, "PARAMS", createParameterLayout())
 #endif
 {
-    for (auto i = 0; i < 8; ++i)                // Define voices
+    for (auto i = 0; i < NUM_VOICES; ++i)                // Define voices
         mSynth.addVoice(new AugsVoice());
 
     mSynth.addSound(new AugsSound());       // Add Sound

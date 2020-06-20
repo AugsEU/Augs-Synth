@@ -1,6 +1,7 @@
 #pragma once
 
 
+#define NUM_VOICES 1
 
 typedef struct 
 {

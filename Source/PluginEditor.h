@@ -18,6 +18,19 @@
 #define SLIDER_TXT_WIDTH (int)(GUI_SPACING*2.75)
 #define SLIDER_TXT_HEIGHT 19
 
+typedef struct
+{
+    Slider Slider;
+    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> Attachment;
+} Slider_Attach;
+
+typedef struct
+{
+    ComboBox ComboBox;
+    std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> Attachment;
+} Combo_Attach;
+
+
 //==============================================================================
 /**
 */
@@ -35,9 +48,33 @@ public:
     void handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
     void handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float /*velocity*/) override;
 
+    //UI Elements
+    //Env Sliders
+    Slider_Attach AttackSlider;
+    Slider_Attach DecaySlider;
+    Slider_Attach SustainSlider;
+    Slider_Attach ReleaseSlider;
+
+    //Volume Slider
+    Slider_Attach VolumeSlider;
+
+    //OscCombo
+    Combo_Attach OscSelect;
+
+    //Distortion
+    Slider_Attach PowerDistortionSlider;
+    Slider_Attach TrimDistortionSlider;
+
+    //Filter settings
+    Combo_Attach FilterSelect;
+    Slider_Attach CutOffSlider;
+    Slider_Attach ResonanceSlider;
+    
+
 private:
     void InitGUI();
-    void InitSlider(Slider& MySlider, double Min, double Max, double Increment = 0.0, Slider::SliderStyle style = Slider::SliderStyle::LinearHorizontal);
+    void InitSlider(Slider_Attach& MySlider, int Param_ID, double Increment = 0.0, Slider::SliderStyle style = Slider::SliderStyle::LinearHorizontal);
+    void InitCombo(Combo_Attach& MyCombo, int Param_ID, const StringArray& items);
 
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
@@ -47,45 +84,8 @@ private:
     MidiKeyboardState& mKeyState;
     MidiKeyboardComponent keyboardComponent;
 
-    //Env Sliders
-    Slider AttackSlider;
-    Slider DecaySlider;
-    Slider SustainSlider;
-    Slider ReleaseSlider;
-
-    //Volume Slider
-    Slider VolumeSlider;
-
-    //OscCombo
-    ComboBox OscSelect;
-
-    //Distortion
-    Slider PowerDistortionSlider;
-    Slider TrimDistortionSlider;
-
-    //Filter settings
-    ComboBox FilterSelect;
-    Slider CutOffSlider;
-    Slider ResonanceSlider;
-
 public:
-    //ADSR
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> AtkSliderAttach;
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> DecaySliderAttach;
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> SusSliderAttach;
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> RelSliderAttach;
 
-    //Volume
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> VolSliderAttach;
-    //Oscillator
-    std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> OscSelectAttach;
-    //Distortion
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> PowDistortAttach;
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> TrimDistortAttach;
-    //Filter
-    std::unique_ptr<AudioProcessorValueTreeState::ComboBoxAttachment> FilterSelectAttach;
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> CutOffAttach;
-    std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> ResAttach;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AugsSynthAudioProcessorEditor)
 };
