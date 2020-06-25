@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "ParameterInterpolator.h"
 
 //==============================================================================
 /**
@@ -64,10 +65,11 @@ private:
 
     AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
+
     Synthesiser mSynth;
     MidiKeyboardState mKeyState;
 
-    
+    ParameterInterpolator mIterpolator;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AugsSynthAudioProcessor)

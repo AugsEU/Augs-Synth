@@ -23,7 +23,7 @@ AugsSynthAudioProcessor::AugsSynthAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       ), mParamTree(*this, nullptr, "PARAMS", createParameterLayout())
+                       ), mParamTree(*this, nullptr, "PARAMS", createParameterLayout()), mIterpolator()
 #endif
 {
     for (auto i = 0; i < NUM_VOICES; ++i)                // Define voices
@@ -157,7 +157,10 @@ bool AugsSynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMessages)
 {
     buffer.clear();
+    int Num_Samples = buffer.getNumSamples();
+
     mKeyState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
+    mIterpolator.StartNewBuffer(mParamTree, Num_Samples);
 
     double Attack = mParamTree.getParameterAsValue(FloatParamProps[0].ID).getValue();
     double Decay = mParamTree.getParameterAsValue(FloatParamProps[1].ID).getValue();
@@ -182,18 +185,25 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
     mSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
     float PowDist = (float)mParamTree.getParameterAsValue(FloatParamProps[6].ID).getValue();
-    float TrimDist = 1-(float)mParamTree.getParameterAsValue(FloatParamProps[7].ID).getValue();
-    double Volume = mParamTree.getParameterAsValue(FloatParamProps[4].ID).getValue();
+    
 
-    for (int sample = 0; sample < buffer.getNumSamples(); sample++)
+
+
+    for (int sample = 0; sample < Num_Samples; sample++)
     {
         for (int channel = 0; channel < buffer.getNumChannels(); channel++)
         {
             float MySample = buffer.getSample(channel, sample);
-
+            
+            //Distortion
+            float PowDist = mIterpolator.GetFloat(6, sample);
+            float TrimDist = 1 - mIterpolator.GetFloat(7, sample);
             ApplyDistort(MySample, PowDist, TrimDist);
 
+            //Volume
+            float Volume = mIterpolator.GetFloat(4, sample);
             MySample *= Volume;
+
             buffer.setSample(channel, sample, MySample);
         }
     }

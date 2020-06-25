@@ -4,6 +4,10 @@
               pluginVST3Category="Instrument,Synth" pluginCharacteristicsValue="pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn">
   <MAINGROUP id="PhCh5B" name="Augs Synth">
     <GROUP id="{8A646E7D-788C-F100-CDB0-4BAEF60D8B7F}" name="Source">
+      <FILE id="QMX77C" name="ParameterInterpolator.cpp" compile="1" resource="0"
+            file="Source/ParameterInterpolator.cpp"/>
+      <FILE id="DFcVxV" name="ParameterInterpolator.h" compile="0" resource="0"
+            file="Source/ParameterInterpolator.h"/>
       <GROUP id="{3AB4B9AA-2A1D-6F00-4D3F-E467A4223398}" name="Filters">
         <FILE id="Z0ZzTb" name="RecursiveFilter.cpp" compile="1" resource="0"
               file="Source/RecursiveFilter.cpp"/>

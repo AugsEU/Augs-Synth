@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 
 #define NUM_VOICES 1
 
