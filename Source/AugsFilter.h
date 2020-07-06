@@ -10,28 +10,53 @@
 
 #pragma once
 #include "SinglePoleFilter.h"
-
+#include "NarrowBand.h"
+#include "NthOrderFilter.h"
 
 class AugsFilter
 {
 public:
-	enum FilterMode
+	enum LowFilterType
 	{
-		FILTER_LOW_PASS = 0,
-		FILTER_HIGH_PASS,
-		FILTER_BAND_PASS,
-		FILTER_OFF,
-		kNumOscillatorModes
+		LOW_SINGLEPOLE = 0,
+		LOW_THIRD_ORDER,
+		kNumLowFilterTypes
 	};
+
+	enum BandFilterType
+	{
+		BAND_NARROWBAND = 0,
+		BAND_THIRD_ORDER,
+		kNumBandFilterTypes
+	};
+
 	void setFreqAndRes(double newFreq, double newRes);
 	void setMode(FilterMode newMode) { mMode = newMode; }
 	void ProcessSample(double& Sample);
 
-	AugsFilter() : mMode(FILTER_OFF), mFreq(0.0), mRes(1.0) {}
+	AugsFilter() : 
+		mMode(FILTER_OFF),
+		mLowType(LowFilterType::LOW_THIRD_ORDER),
+		mBandType(BandFilterType::BAND_THIRD_ORDER),
+		mThirdOrderFilter(3)
+	{}
 	~AugsFilter() {}
 private:
+	void LowPass(double& Sample);
+	void HighPass(double& Sample);
+	void BandPass(double& Sample);
+	void BandReject(double& Sample);
+
 	FilterMode mMode;
-	double mFreq;
-	double mRes;
-	SinglePoleFilter mFilter;
+	LowFilterType mLowType;
+	BandFilterType mBandType;
+
+	//Multi-type filters
+	NthOrderFilter mThirdOrderFilter;
+
+	//Low pass filters
+	SinglePoleFilter mSPFilter;
+
+	//Band pass filters
+	NarrowBand mNBFilter;
 };

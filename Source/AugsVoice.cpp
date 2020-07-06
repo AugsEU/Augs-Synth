@@ -35,6 +35,7 @@ void AugsVoice::stopNote(float /*velocity*/, bool allowTailOff)
     
 }
 
+
 void AugsVoice::pitchWheelMoved(int newPitchWheelValue) {}
 
 void AugsVoice::controllerMoved(int controllerNumber, int newControllerValue) {}
@@ -43,6 +44,20 @@ void AugsVoice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSampl
 {
     for (int sample = 0; sample < numSamples; sample++)
     {
+        double Attack = rInterpolator.GetFloat(0, sample);
+        double Decay = rInterpolator.GetFloat(1, sample);
+        double Sustain = rInterpolator.GetFloat(2, sample);
+        double Release = rInterpolator.GetFloat(3, sample);
+        setEnvelope(Attack, Decay, Sustain, Release);
+
+        int OscMode = (int)rInterpolator.GetFloatOld(5);
+        setOsc(static_cast<Oscillator::OscillatorMode>(OscMode));
+
+        int FilterMode = (int)rInterpolator.GetFloatOld(8);
+        float FilterCut = rInterpolator.GetFloat(9,sample);
+        float FilterRes = rInterpolator.GetFloat(10, sample);
+        setFilter(FilterCut, FilterRes, FilterMode);
+
         double SampleVal = mOsc.nextSample();
         double EnvValue = mEnv.nextSample();
         SampleVal = SampleVal * EnvValue * mVelocity;

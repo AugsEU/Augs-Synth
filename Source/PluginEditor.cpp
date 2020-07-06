@@ -59,7 +59,7 @@ void AugsSynthAudioProcessorEditor::InitGUI()
     InitSlider(TrimDistortionSlider, 7);
 
     //Filter
-    InitCombo(FilterSelect, 8, { "Low pass", "High pass", "Band pass", "Off" });
+    InitCombo(FilterSelect, 8, { "Low pass", "High pass", "Band pass", "Band reject", "Off" });
     InitSlider(CutOffSlider, 9);
     InitSlider(ResonanceSlider, 10);
 

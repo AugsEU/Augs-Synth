@@ -15,12 +15,19 @@
 class ParameterInterpolator
 {
 public:
-    ParameterInterpolator() {}
+    ParameterInterpolator() 
+    {
+        for (int i = 0; i < NUM_FLOAT_PARAMS; i++)
+        {
+            OldFloatParams[i] = 0;
+            GoalFloatParams[i] = 0;
+        }
+    }
     ~ParameterInterpolator() {}
 
     void StartNewBuffer(AudioProcessorValueTreeState& State, int& BuffSize);
     float GetFloat(const int& i, const int& SampleIdx);
-
+    float GetFloatOld(const int& i);
 
 private:
     int BufferSize = 0;

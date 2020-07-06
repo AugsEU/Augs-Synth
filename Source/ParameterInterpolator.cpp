@@ -30,3 +30,8 @@ float ParameterInterpolator::GetFloat(const int& i, const int& SampleIdx)
     float Multiplyer = (float)SampleIdx / (float)BufferSize;
     return OldFloatParams[i] + Multiplyer*(GoalFloatParams[i] - OldFloatParams[i]);
 }
+
+float ParameterInterpolator::GetFloatOld(const int& i)
+{
+    return OldFloatParams[i];
+}

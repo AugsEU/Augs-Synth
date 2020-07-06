@@ -9,6 +9,16 @@
       <FILE id="DFcVxV" name="ParameterInterpolator.h" compile="0" resource="0"
             file="Source/ParameterInterpolator.h"/>
       <GROUP id="{3AB4B9AA-2A1D-6F00-4D3F-E467A4223398}" name="Filters">
+        <FILE id="Gy8Pom" name="AbstractFilter.cpp" compile="1" resource="0"
+              file="Source/AbstractFilter.cpp"/>
+        <FILE id="W5yDqF" name="AbstractFilter.h" compile="0" resource="0"
+              file="Source/AbstractFilter.h"/>
+        <FILE id="HnrN2G" name="NarrowBand.cpp" compile="1" resource="0" file="Source/NarrowBand.cpp"/>
+        <FILE id="e7w5dQ" name="NarrowBand.h" compile="0" resource="0" file="Source/NarrowBand.h"/>
+        <FILE id="sRoDGU" name="NthOrderFilter.cpp" compile="1" resource="0"
+              file="Source/NthOrderFilter.cpp"/>
+        <FILE id="xbtrTu" name="NthOrderFilter.h" compile="0" resource="0"
+              file="Source/NthOrderFilter.h"/>
         <FILE id="Z0ZzTb" name="RecursiveFilter.cpp" compile="1" resource="0"
               file="Source/RecursiveFilter.cpp"/>
         <FILE id="X4NMww" name="RecursiveFilter.h" compile="0" resource="0"
@@ -17,29 +27,6 @@
               file="Source/SinglePoleFilter.cpp"/>
         <FILE id="eQfowu" name="SinglePoleFilter.h" compile="0" resource="0"
               file="Source/SinglePoleFilter.h"/>
-      </GROUP>
-      <GROUP id="{0C05AEFD-8CA5-8AA9-0683-1EDB5F03BAC8}" name="Maximilian">
-        <GROUP id="{5A28147C-CF13-2CA7-D3D8-1653BA8BEA6E}" name="libs">
-          <FILE id="cRPRsx" name="fft.cpp" compile="1" resource="0" file="../../Lib/cpp/Maximilian/libs/fft.cpp"/>
-          <FILE id="WLsj3c" name="fft.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/libs/fft.h"/>
-          <FILE id="SvAHpj" name="maxiAtoms.cpp" compile="1" resource="0" file="../../Lib/cpp/Maximilian/libs/maxiAtoms.cpp"/>
-          <FILE id="SYGNA6" name="maxiAtoms.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/libs/maxiAtoms.h"/>
-          <FILE id="Vozmc1" name="maxiBark.cpp" compile="1" resource="0" file="../../Lib/cpp/Maximilian/libs/maxiBark.cpp"/>
-          <FILE id="S7F8n6" name="maxiBark.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/libs/maxiBark.h"/>
-          <FILE id="vhjBBJ" name="maxiFFT.cpp" compile="1" resource="0" file="../../Lib/cpp/Maximilian/libs/maxiFFT.cpp"/>
-          <FILE id="UqZbWA" name="maxiFFT.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/libs/maxiFFT.h"/>
-          <FILE id="v0wAoo" name="maxiGrains.cpp" compile="1" resource="0" file="../../Lib/cpp/Maximilian/libs/maxiGrains.cpp"/>
-          <FILE id="svlDYE" name="maxiGrains.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/libs/maxiGrains.h"/>
-          <FILE id="IQ9hnY" name="maxim.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/libs/maxim.h"/>
-          <FILE id="RZcB5P" name="maxiMFCC.cpp" compile="1" resource="0" file="../../Lib/cpp/Maximilian/libs/maxiMFCC.cpp"/>
-          <FILE id="M0X3PS" name="maxiMFCC.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/libs/maxiMFCC.h"/>
-          <FILE id="V9L9Zs" name="sineTable.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/libs/sineTable.h"/>
-        </GROUP>
-        <FILE id="Udkpw7" name="main.cpp" compile="1" resource="0" file="../../Lib/cpp/Maximilian/main.cpp"/>
-        <FILE id="ndNLrp" name="maximilian.cpp" compile="1" resource="0" file="../../Lib/cpp/Maximilian/maximilian.cpp"/>
-        <FILE id="KAI0Ab" name="maximilian.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/maximilian.h"/>
-        <FILE id="KJrcZj" name="stb_vorbis.c" compile="1" resource="0" file="../../Lib/cpp/Maximilian/stb_vorbis.c"/>
-        <FILE id="hzI9Xo" name="stb_vorbis.h" compile="0" resource="0" file="../../Lib/cpp/Maximilian/stb_vorbis.h"/>
       </GROUP>
       <FILE id="KWIsBS" name="Constants.h" compile="0" resource="0" file="Source/Constants.h"/>
       <FILE id="e7qASm" name="AugsFilter.h" compile="0" resource="0" file="Source/AugsFilter.h"/>

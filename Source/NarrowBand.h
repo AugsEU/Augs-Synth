@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 
-    SinglePoleFilter.h
-    Created: 20 Jun 2020 6:04:43pm
+    NarrowBand.h
+    Created: 26 Jun 2020 6:56:00pm
     Author:  August
 
   ==============================================================================
@@ -12,12 +12,13 @@
 #include "RecursiveFilter.h"
 #include <math.h>
 
-class SinglePoleFilter : public RecursiveFilter
+class NarrowBand : public RecursiveFilter
 {
 public:
-    SinglePoleFilter() : RecursiveFilter({ 0.5,0.0 }, { 0.5 })
+    NarrowBand() : RecursiveFilter({ 0.0, 0.0, 0.0 }, {0.0, 0.0})
     {
-
+        double F = sampleRate / 4.0;
+        UpdateParameters(F, 2.0);
     }
     void UpdateParameters(double CutOff, double Res);
 };

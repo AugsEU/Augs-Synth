@@ -27,7 +27,7 @@ AugsSynthAudioProcessor::AugsSynthAudioProcessor()
 #endif
 {
     for (auto i = 0; i < NUM_VOICES; ++i)                // Define voices
-        mSynth.addVoice(new AugsVoice());
+        mSynth.addVoice(new AugsVoice(mIterpolator));
 
     mSynth.addSound(new AugsSound());       // Add Sound
 }
@@ -122,6 +122,7 @@ void AugsSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     mSynth.setCurrentPlaybackSampleRate(sampleRate);
+    AbstractFilter::SetSampleRate(sampleRate);
 }
 
 void AugsSynthAudioProcessor::releaseResources()
@@ -162,32 +163,7 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
     mKeyState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
     mIterpolator.StartNewBuffer(mParamTree, Num_Samples);
 
-    double Attack = mParamTree.getParameterAsValue(FloatParamProps[0].ID).getValue();
-    double Decay = mParamTree.getParameterAsValue(FloatParamProps[1].ID).getValue();
-    double Sustain = mParamTree.getParameterAsValue(FloatParamProps[2].ID).getValue();
-    double Release = mParamTree.getParameterAsValue(FloatParamProps[3].ID).getValue();
-    int OscMode = mParamTree.getParameterAsValue(FloatParamProps[5].ID).getValue();
-    int FilterMode = mParamTree.getParameterAsValue(FloatParamProps[8].ID).getValue();
-    double FilterCut = mParamTree.getParameterAsValue(FloatParamProps[9].ID).getValue();
-    double FilterRes = mParamTree.getParameterAsValue(FloatParamProps[10].ID).getValue();
-
-    for (int i = 0; i < mSynth.getNumVoices(); i++)
-    {
-        auto* Voice = dynamic_cast<AugsVoice*>(mSynth.getVoice(i));
-        if (Voice)
-        {
-            Voice->setEnvelope(Attack, Decay, Sustain, Release);
-            Voice->setOsc(static_cast<Oscillator::OscillatorMode>(OscMode));
-            Voice->setFilter(FilterCut, FilterRes, FilterMode);
-        }
-    }
-
     mSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-
-    float PowDist = (float)mParamTree.getParameterAsValue(FloatParamProps[6].ID).getValue();
-    
-
-
 
     for (int sample = 0; sample < Num_Samples; sample++)
     {
