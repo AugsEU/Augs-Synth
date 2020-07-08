@@ -11,6 +11,7 @@
 #pragma once
 #include <vector>
 #include "Defs.h"
+#include "Constants.h"
 #include "AbstractFilter.h"
 
 class NthOrderFilter : public AbstractFilter

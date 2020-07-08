@@ -11,7 +11,8 @@
 #include "NthOrderFilter.h"
 void NthOrderFilter::UpdateParameters(double CutOff, double Res)
 {
-    mFreq = 2 * CutOff / sampleRate;
+    mFreq = 2 * PI * CutOff / sampleRate;
+    if (mFreq > 0.99) mFreq = 0.99;
     mRes = 1.0 / Res;
     calculateFeedbackAmount();
 }

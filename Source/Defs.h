@@ -24,8 +24,8 @@ const FloatParam_Properties FloatParamProps[NUM_FLOAT_PARAMS] =
         {"PowDist",     "Pow dist", 0.4,    5.0,    1.0,    0.7},
         {"TrimDist",    "Trim dist",0.0,    0.99,   0.0,    2.3},
         {"FilterTyp", "Filter type",0.0,    4.0,    3.0,    1.0},//8
-        {"CutOff",      "Cut Off",  50.0,   20000.0,0.0,    0.2},
-        {"FiltRes",     "Res",      1.0,    10.0,   1.0,    0.7}, };
+        {"CutOff",      "Cut Off",  50.0,   20000.0,1000.0, 0.5},
+        {"FiltRes",     "Res",      1.0,    10.0,   5.0,    0.7}, };
 
 //Filter Enums
 enum FilterMode
