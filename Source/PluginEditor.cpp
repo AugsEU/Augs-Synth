@@ -59,9 +59,16 @@ void AugsSynthAudioProcessorEditor::InitGUI()
     InitSlider(TrimDistortionSlider, 7);
 
     //Filter
-    InitCombo(FilterSelect, 8, { "Low pass", "High pass", "Band pass", "Band reject", "Off" });
+    InitCombo(FilterSelect, 8, {"Off","Low pass", "High pass", "Band pass", "Band reject" });
     InitSlider(CutOffSlider, 9);
+    CutOffSlider.Slider.setTextValueSuffix("Hz");
     InitSlider(ResonanceSlider, 10);
+
+    //Delay
+    InitSlider(DlyVolumeSlider, 11);
+    InitSlider(DlyFallOffSlider, 12);
+    InitSlider(DlyTimeSlider, 13);
+    DlyTimeSlider.Slider.setTextValueSuffix("s");
 
 }
 
@@ -153,6 +160,11 @@ void AugsSynthAudioProcessorEditor::resized()
     FilterSelect.ComboBox.setBounds(245, 21, 95, 20);
     CutOffSlider.Slider.setBounds(380, GUI_SPACING * 1 + 10, SliderWidth, GUI_SPACING);
     ResonanceSlider.Slider.setBounds(380, GUI_SPACING * 2 + 10, SliderWidth, GUI_SPACING);
+
+    //Delay
+    DlyVolumeSlider.Slider.setBounds(2 * GUI_SPACING + 500, 500 - GUI_SPACING, SliderWidth, GUI_SPACING);
+    DlyFallOffSlider.Slider.setBounds(2 * GUI_SPACING + 500, 500 , SliderWidth, GUI_SPACING);
+    DlyTimeSlider.Slider.setBounds(2 * GUI_SPACING + 500, 500 + GUI_SPACING, SliderWidth, GUI_SPACING);
 }
 
 void AugsSynthAudioProcessorEditor::handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) 

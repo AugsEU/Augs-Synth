@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "ParameterInterpolator.h"
+#include "DelayEffect.h"
 
 //==============================================================================
 /**
@@ -61,13 +62,15 @@ public:
     //==============================================================================
     void UpdateKeyState(MidiKeyboardState& newState);
 private:
+    void AddToAllChannels(float ValToAdd, int Sample, AudioSampleBuffer& buffer);
     void ApplyDistort(float& Sample, float& Inner, float& Outer);
 
     AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
-
     Synthesiser mSynth;
     MidiKeyboardState mKeyState;
+
+    DelayEffect mDelay;
 
     ParameterInterpolator mIterpolator;
 

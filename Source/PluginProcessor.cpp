@@ -16,14 +16,17 @@
 //==============================================================================
 AugsSynthAudioProcessor::AugsSynthAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", AudioChannelSet::stereo(), true)
-                     #endif
-                       ), mParamTree(*this, nullptr, "PARAMS", createParameterLayout()), mIterpolator()
+    : AudioProcessor(BusesProperties()
+#if ! JucePlugin_IsMidiEffect
+#if ! JucePlugin_IsSynth
+        .withInput("Input", AudioChannelSet::stereo(), true)
+#endif
+        .withOutput("Output", AudioChannelSet::stereo(), true)
+#endif
+    ), mParamTree(*this, nullptr, "PARAMS", createParameterLayout()),
+    mIterpolator(),
+    mDelay()
+
 #endif
 {
     for (auto i = 0; i < NUM_VOICES; ++i)                // Define voices
@@ -123,6 +126,9 @@ void AugsSynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     // initialisation that you need..
     mSynth.setCurrentPlaybackSampleRate(sampleRate);
     AbstractFilter::SetSampleRate(sampleRate);
+
+    size_t DelayBufferSize = roundToInt<float>((float)sampleRate * FloatParamProps[12].maxVal);
+    mDelay.ResizeBuffer(DelayBufferSize);
 }
 
 void AugsSynthAudioProcessor::releaseResources()
@@ -167,7 +173,9 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
 
     for (int sample = 0; sample < Num_Samples; sample++)
     {
-        for (int channel = 0; channel < buffer.getNumChannels(); channel++)
+        int NumChannels = buffer.getNumChannels();
+        float SampleAverage = 0.0f;
+        for (int channel = 0; channel < NumChannels; channel++)
         {
             float MySample = buffer.getSample(channel, sample);
             
@@ -180,8 +188,33 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
             float Volume = mIterpolator.GetFloat(4, sample);
             MySample *= Volume;
 
+            SampleAverage += MySample;
             buffer.setSample(channel, sample, MySample);
         }
+        //Process delay
+        SampleAverage = SampleAverage / (float)NumChannels;
+
+        float DelayVol = mIterpolator.GetFloat(11, sample);
+        float DelayFall = mIterpolator.GetFloat(12, sample);
+        float DelayTime = mIterpolator.GetFloat(13, sample);
+        size_t DelayTimeInSamples = roundToInt<float>(DelayTime * (float)getSampleRate());
+        mDelay.UpdateParameters(DelayVol, DelayFall, DelayTimeInSamples);
+        float DelaySample = mDelay.ProcessSample(SampleAverage);
+        
+        AddToAllChannels(DelaySample, sample, buffer);
+    }
+}
+
+void AugsSynthAudioProcessor::AddToAllChannels(float ValToAdd, int SampleIdx, AudioSampleBuffer& buffer)
+{
+    int NumChannels = buffer.getNumChannels();
+    for (int channel = 0; channel < NumChannels; channel++)
+    {
+        float MySample = buffer.getSample(channel, SampleIdx);
+        MySample += ValToAdd;
+        if (MySample > 1.0f) MySample = 1.0f;
+        if (MySample < -1.0f) MySample = -1.0f;
+        buffer.setSample(channel, SampleIdx, MySample);
     }
 }
 

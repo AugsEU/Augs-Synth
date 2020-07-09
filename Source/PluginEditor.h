@@ -69,6 +69,11 @@ public:
     Combo_Attach FilterSelect;
     Slider_Attach CutOffSlider;
     Slider_Attach ResonanceSlider;
+
+    //Delay settings
+    Slider_Attach DlyVolumeSlider;
+    Slider_Attach DlyFallOffSlider;
+    Slider_Attach DlyTimeSlider;
     
 
 private:

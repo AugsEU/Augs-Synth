@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="Ahskp3" name="Augs Synth" projectType="audioplug" jucerVersion="5.4.7"
-              pluginVST3Category="Instrument,Synth" pluginCharacteristicsValue="pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn">
+<JUCERPROJECT id="Ahskp3" name="Augs Synth" projectType="audioplug" pluginVST3Category="Instrument,Synth"
+              pluginCharacteristicsValue="pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn"
+              jucerFormatVersion="1">
   <MAINGROUP id="PhCh5B" name="Augs Synth">
     <GROUP id="{8A646E7D-788C-F100-CDB0-4BAEF60D8B7F}" name="Source">
       <FILE id="QMX77C" name="ParameterInterpolator.cpp" compile="1" resource="0"
@@ -27,6 +28,10 @@
               file="Source/SinglePoleFilter.cpp"/>
         <FILE id="eQfowu" name="SinglePoleFilter.h" compile="0" resource="0"
               file="Source/SinglePoleFilter.h"/>
+      </GROUP>
+      <GROUP id="{7F2AD35D-92ED-F904-DE5A-45C029DB87B3}" name="Effects">
+        <FILE id="BOJ2Yj" name="DelayEffect.cpp" compile="1" resource="0" file="Source/DelayEffect.cpp"/>
+        <FILE id="s7wURX" name="DelayEffect.h" compile="0" resource="0" file="Source/DelayEffect.h"/>
       </GROUP>
       <FILE id="KWIsBS" name="Constants.h" compile="0" resource="0" file="Source/Constants.h"/>
       <FILE id="e7qASm" name="AugsFilter.h" compile="0" resource="0" file="Source/AugsFilter.h"/>
