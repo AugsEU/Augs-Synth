@@ -198,7 +198,7 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
         float DelayFall = mIterpolator.GetFloat(12, sample);
         float DelayTime = mIterpolator.GetFloat(13, sample);
         size_t DelayTimeInSamples = roundToInt<float>(DelayTime * (float)getSampleRate());
-        mDelay.UpdateParameters(DelayVol, DelayFall, DelayTimeInSamples);
+        mDelay.UpdateParameters(DelayVol, DelayFall, DelayTime, DelayTimeInSamples);
         float DelaySample = mDelay.ProcessSample(SampleAverage);
         
         AddToAllChannels(DelaySample, sample, buffer);

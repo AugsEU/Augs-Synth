@@ -69,6 +69,8 @@ public:
     Combo_Attach FilterSelect;
     Slider_Attach CutOffSlider;
     Slider_Attach ResonanceSlider;
+    Combo_Attach LowTypeSelect;
+    Combo_Attach BandTypeSelect;
 
     //Delay settings
     Slider_Attach DlyVolumeSlider;

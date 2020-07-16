@@ -32,6 +32,8 @@ public:
 
 	void setFreqAndRes(double newFreq, double newRes);
 	void setMode(FilterMode newMode) { mMode = newMode; }
+	void setLowType(LowFilterType newType) { mLowType = newType; }
+	void setBandType(BandFilterType newType) { mBandType = newType; }
 	void ProcessSample(double& Sample);
 
 	AugsFilter() : 

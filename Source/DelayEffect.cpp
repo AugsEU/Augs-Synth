@@ -20,19 +20,24 @@ void DelayEffect::ResizeBuffer(const size_t NewSize)
     mReadIdx = (mWriteIdx - mDelayTime) % NewSize;
 }
 
-void DelayEffect::UpdateParameters(float Volume, float FallOff, size_t SampleTime)
+void DelayEffect::UpdateParameters(float Volume, float FallOff, float TimeInSeconds,  size_t TimeInSamples)
 {
     //set these two is cheap
     mVolume = Volume;
-    mFallOff = FallOff;
+    if (mFallOff != FallOff || mDelayTime != TimeInSamples)
+    {
+        mFallOff = FallOff;
+        mCalculatedFallOff = pow(mFallOff, TimeInSeconds);
+    }
+    if (mDelayTime != TimeInSamples)
+    {
+        mDelayTime = TimeInSamples;//set the delay time
 
-    if (mDelayTime == SampleTime) return;
-    mDelayTime = SampleTime;//set the delay time
+        size_t BuffSize = mSampleBuffer->size();
+        if (mDelayTime > (BuffSize - 1)) mDelayTime = BuffSize - 1;//delay time can't be bigger than the buffer - 1 
 
-    size_t BuffSize = mSampleBuffer->size();
-    if(mDelayTime > (BuffSize - 1)) mDelayTime = BuffSize - 1;//delay time can't be bigger than the buffer - 1 
-
-    mReadIdx = (mWriteIdx - mDelayTime) % BuffSize;//Read
+        mReadIdx = (mWriteIdx - mDelayTime) % BuffSize;//Read
+    }
 }
 
 float DelayEffect::ProcessSample(float Sample)
@@ -42,7 +47,7 @@ float DelayEffect::ProcessSample(float Sample)
     mReadIdx = (mReadIdx + 1) % BuffSize;
     mWriteIdx = (mWriteIdx + 1) % BuffSize;
 
-    float NewSample = BackSample * mFallOff + Sample;
+    float NewSample = BackSample * mCalculatedFallOff + Sample;
     if (NewSample > 1.0f) NewSample = 1.0f;
     if (NewSample < -1.0f) NewSample = -1.0f;
 

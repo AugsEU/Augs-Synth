@@ -26,11 +26,12 @@ public:
 
     }
     void ResizeBuffer(size_t NewSize);
-    void UpdateParameters(float Volume, float FallOff, size_t SampleTime);
+    void UpdateParameters(float Volume, float FallOff, float TimeInSeconds, size_t SampleTime);
     float ProcessSample(float Sample);
 private:
     float mVolume;
     float mFallOff;
+    float mCalculatedFallOff;
     size_t mDelayTime;//Time of delay, given in samples
 
     std::unique_ptr<std::vector<float>> mSampleBuffer;

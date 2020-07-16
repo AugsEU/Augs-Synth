@@ -54,9 +54,15 @@ void AugsVoice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSampl
         setOsc(static_cast<Oscillator::OscillatorMode>(OscMode));
 
         int FilterMode = (int)rInterpolator.GetFloatOld(8);
+        int FilterLowType = (int)rInterpolator.GetFloatOld(14);
+        int FilterBandType = (int)rInterpolator.GetFloatOld(15);
+        mFilter.setLowType(static_cast<AugsFilter::LowFilterType>(FilterLowType));
+        mFilter.setBandType(static_cast<AugsFilter::BandFilterType>(FilterBandType));
+
         float FilterCut = rInterpolator.GetFloat(9,sample);
         float FilterRes = rInterpolator.GetFloat(10, sample);
         setFilter(FilterCut, FilterRes, FilterMode);
+        
 
         double SampleVal = mOsc.nextSample();
         double EnvValue = mEnv.nextSample();

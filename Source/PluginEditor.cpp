@@ -63,6 +63,8 @@ void AugsSynthAudioProcessorEditor::InitGUI()
     InitSlider(CutOffSlider, 9);
     CutOffSlider.Slider.setTextValueSuffix("Hz");
     InitSlider(ResonanceSlider, 10);
+    InitCombo(LowTypeSelect, 14, { "Single pole" , "3rd Order" });
+    InitCombo(BandTypeSelect, 15, { "3rd Order" });
 
     //Delay
     InitSlider(DlyVolumeSlider, 11);
@@ -118,9 +120,9 @@ void AugsSynthAudioProcessorEditor::paint (Graphics& g)
     g.setColour(Colours::darkgrey);
     g.drawRect(0, 470, 195, 80);
     g.setColour(Colours::wheat);
-    g.drawSingleLineText("Distortion", 17, GUI_SPACING * 1 + 472);
-    g.drawSingleLineText("Pow", 17, GUI_SPACING * 2 + 473);
-    g.drawSingleLineText("Trim", 17, GUI_SPACING * 3 + 473);
+    g.drawSingleLineText("Distortion", 14, GUI_SPACING * 1 + 472);
+    g.drawSingleLineText("Pow", 14, GUI_SPACING * 2 + 473);
+    g.drawSingleLineText("Trim", 14, GUI_SPACING * 3 + 473);
 
     //ADSR
     g.setColour(Colours::darkgrey);
@@ -129,6 +131,15 @@ void AugsSynthAudioProcessorEditor::paint (Graphics& g)
     g.drawSingleLineText("Filter", 335 + GUI_SPACING, GUI_SPACING);
     g.drawSingleLineText("Cut", GUI_SPACING + 334, GUI_SPACING * 2 + 4);
     g.drawSingleLineText("Res", GUI_SPACING + 334, GUI_SPACING * 3 + 4);
+
+    //Delay
+    g.setColour(Colours::darkgrey);
+    g.drawRect(195, 450, 210, 100);
+    g.setColour(Colours::wheat);
+    g.drawSingleLineText("Delay", 210, GUI_SPACING * 1 + 452);
+    g.drawSingleLineText("Vol", 210, GUI_SPACING * 2 + 453);
+    g.drawSingleLineText("Fall-off", 210, GUI_SPACING * 3 + 453);
+    g.drawSingleLineText("Time", 210, GUI_SPACING * 4 + 453);
 
 }
 
@@ -158,13 +169,16 @@ void AugsSynthAudioProcessorEditor::resized()
 
     //Filter
     FilterSelect.ComboBox.setBounds(245, 21, 95, 20);
+    LowTypeSelect.ComboBox.setBounds(245, 42, 95, 20);
+    BandTypeSelect.ComboBox.setBounds(245, 63, 95, 20);
     CutOffSlider.Slider.setBounds(380, GUI_SPACING * 1 + 10, SliderWidth, GUI_SPACING);
     ResonanceSlider.Slider.setBounds(380, GUI_SPACING * 2 + 10, SliderWidth, GUI_SPACING);
+    
 
     //Delay
-    DlyVolumeSlider.Slider.setBounds(2 * GUI_SPACING + 500, 500 - GUI_SPACING, SliderWidth, GUI_SPACING);
-    DlyFallOffSlider.Slider.setBounds(2 * GUI_SPACING + 500, 500 , SliderWidth, GUI_SPACING);
-    DlyTimeSlider.Slider.setBounds(2 * GUI_SPACING + 500, 500 + GUI_SPACING, SliderWidth, GUI_SPACING);
+    DlyVolumeSlider.Slider.setBounds(2 * GUI_SPACING + 215, 500 - GUI_SPACING, SliderWidth, GUI_SPACING);
+    DlyFallOffSlider.Slider.setBounds(2 * GUI_SPACING + 215, 500 , SliderWidth, GUI_SPACING);
+    DlyTimeSlider.Slider.setBounds(2 * GUI_SPACING + 215, 500 + GUI_SPACING, SliderWidth, GUI_SPACING);
 }
 
 void AugsSynthAudioProcessorEditor::handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) 

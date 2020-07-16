@@ -13,7 +13,7 @@ typedef struct
     const double skewFactor;
 } FloatParam_Properties;
 
-#define NUM_FLOAT_PARAMS 14
+#define NUM_FLOAT_PARAMS 16
 const FloatParam_Properties FloatParamProps[NUM_FLOAT_PARAMS] =
 {       {"EnvAttack",   "Attack",   0.0,    3.0,    0.1,    0.6},//0
         {"EnvDecay",    "Decay",    0.0,    3.0,    0.1,    0.7},//1
@@ -26,9 +26,11 @@ const FloatParam_Properties FloatParamProps[NUM_FLOAT_PARAMS] =
         {"FilterTyp", "Filter type",0.0,    4.0,    0.0,    1.0},//8
         {"CutOff",      "Cut Off",  50.0,   20000.0,1000.0, 0.5},
         {"FiltRes",    "Resonance", 1.0,    10.0,   3.0, 0.6},
-        {"DelayVol",    "DlyVol",   0.0,    1.0,    0.0,    0.7},
-        {"DelayFall",   "DlyFll",   0.0,    1.0,    0.5,    0.7}, //11
-        {"DelayTime",   "DlyTm",    0.0,    2.0,    0.5,    0.6} };//12
+        {"DelayVol",    "DlyVol",   0.0,    1.0,    0.0,    0.7},//11
+        {"DelayFall",   "DlyFll",   0.0,    1.0,    0.5,    0.7}, //12
+        {"DelayTime",   "DlyTm",    0.0,    2.0,    0.5,    0.6}, //13
+        {"LowTyp",      "Low type", 0.0,    1.0,    0.0,    1.0}, //14
+        {"BandTyp",     "Band type",0.0,    1.0,    0.0,    1.0}, };//15
 
 //Filter Enums
 enum FilterMode
