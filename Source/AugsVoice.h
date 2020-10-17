@@ -13,6 +13,14 @@
 class AugsVoice : public SynthesiserVoice
 {
 public:
+	enum TuningType
+	{
+		TWELVE_TET = 0,
+		SEVEN_TWELVE_ET,
+		FOUR_TWELVE_ET,
+		kNumTuningTypes
+	};
+
 	bool canPlaySound(SynthesiserSound* sound) override;
 	void startNote(int midiNoteNumber, float velocity, SynthesiserSound* sound, int currentPitchWheelPosition) override;
 	void stopNote(float velocity, bool allowTailOff) override;
@@ -40,5 +48,5 @@ private:
 		mFilter.setMode(static_cast<FilterMode>(Mode));
 	}
 
-
+	double NoteNumberToHz(int midiNoteNumber, TuningType TT);
 };

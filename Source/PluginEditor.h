@@ -76,6 +76,9 @@ public:
     Slider_Attach DlyVolumeSlider;
     Slider_Attach DlyFallOffSlider;
     Slider_Attach DlyTimeSlider;
+
+    //Tuning
+    Combo_Attach TuningSelect;
     
 
 private:

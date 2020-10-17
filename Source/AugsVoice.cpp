@@ -8,8 +8,24 @@ bool AugsVoice::canPlaySound(SynthesiserSound* sound)
 void AugsVoice::startNote(int midiNoteNumber, float velocity, SynthesiserSound*, int /*currentPitchWheelPosition*/)
 {
     mVelocity = velocity;
-    mOsc.setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
+    TuningType NoteTuningType = static_cast<TuningType>((int)rInterpolator.GetFloatOld(16));
+    mOsc.setFrequency(NoteNumberToHz(midiNoteNumber, NoteTuningType));
     mEnv.enterStage(EnvelopeGenerator::EnvelopeStage::ENVELOPE_STAGE_ATTACK);
+}
+
+double AugsVoice::NoteNumberToHz(int midiNoteNumber, TuningType TT)
+{
+    switch (TT)
+    {
+    case AugsVoice::TWELVE_TET:
+        return FREQ_A * std::pow(2.0, (midiNoteNumber - 69) / 12.0);
+    case AugsVoice::SEVEN_TWELVE_ET:
+        return FREQ_A * std::pow(1.5, (midiNoteNumber - 69) / 7.0);
+    case AugsVoice::FOUR_TWELVE_ET:
+        return FREQ_A * std::pow(1.25, (midiNoteNumber - 69) / 4.0);
+    default:
+        return 440.0f;
+    }
 }
 
 void AugsVoice::setEnvelope(double a, double d, double s, double r)
@@ -42,6 +58,7 @@ void AugsVoice::controllerMoved(int controllerNumber, int newControllerValue) {}
 
 void AugsVoice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSample, int numSamples)
 {
+
     for (int sample = 0; sample < numSamples; sample++)
     {
         double Attack = rInterpolator.GetFloat(0, sample);
@@ -63,10 +80,11 @@ void AugsVoice::renderNextBlock(AudioBuffer<float>& outputBuffer, int startSampl
         float FilterRes = rInterpolator.GetFloat(10, sample);
         setFilter(FilterCut, FilterRes, FilterMode);
         
+        double Volume = rInterpolator.GetFloat(4, sample);
 
         double SampleVal = mOsc.nextSample();
         double EnvValue = mEnv.nextSample();
-        SampleVal = SampleVal * EnvValue * mVelocity;
+        SampleVal = SampleVal * EnvValue * mVelocity * Volume;
         mFilter.ProcessSample(SampleVal);
 
         if ((mEnv.getCurrentStage() == EnvelopeGenerator::EnvelopeStage::ENVELOPE_STAGE_OFF) || (EnvValue < minimumValue))

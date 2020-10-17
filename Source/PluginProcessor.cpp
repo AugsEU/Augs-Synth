@@ -184,9 +184,8 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
             float TrimDist = 1 - mIterpolator.GetFloat(7, sample);
             ApplyDistort(MySample, PowDist, TrimDist);
 
-            //Volume
-            float Volume = mIterpolator.GetFloat(4, sample);
-            MySample *= Volume;
+
+
 
             SampleAverage += MySample;
             buffer.setSample(channel, sample, MySample);
@@ -201,7 +200,10 @@ void AugsSynthAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer
         mDelay.UpdateParameters(DelayVol, DelayFall, DelayTime, DelayTimeInSamples);
         float DelaySample = mDelay.ProcessSample(SampleAverage);
         
-        AddToAllChannels(DelaySample, sample, buffer);
+        
+        //Volume
+        float Volume = mIterpolator.GetFloat(4, sample);
+        AddToAllChannels(DelaySample * Volume, sample, buffer);
     }
 }
 

@@ -72,6 +72,8 @@ void AugsSynthAudioProcessorEditor::InitGUI()
     InitSlider(DlyTimeSlider, 13);
     DlyTimeSlider.Slider.setTextValueSuffix("s");
 
+    //Tuning
+    InitCombo(TuningSelect, 16, { "12-TET","7-12-ET", "4-12-ET" });
 }
 
 void AugsSynthAudioProcessorEditor::InitSlider(Slider_Attach& MySlider, int Param_ID, double Increment, Slider::SliderStyle style)
@@ -124,6 +126,12 @@ void AugsSynthAudioProcessorEditor::paint (Graphics& g)
     g.drawSingleLineText("Pow", 14, GUI_SPACING * 2 + 473);
     g.drawSingleLineText("Trim", 14, GUI_SPACING * 3 + 473);
 
+    //Tuning
+    g.setColour(Colours::darkgrey);
+    g.drawRect(0, 410, 195, 60);
+    g.setColour(Colours::wheat);
+    g.drawSingleLineText("Tuning", 14, GUI_SPACING * 1 + 412);
+
     //ADSR
     g.setColour(Colours::darkgrey);
     g.drawRect(340, 0, 195, 80);
@@ -166,6 +174,9 @@ void AugsSynthAudioProcessorEditor::resized()
     //distortion
     PowerDistortionSlider.Slider.setBounds(2 * GUI_SPACING, 500, SliderWidth, GUI_SPACING);
     TrimDistortionSlider.Slider.setBounds(2 * GUI_SPACING, 500 + GUI_SPACING, SliderWidth, GUI_SPACING);
+
+    //Tuning
+    TuningSelect.ComboBox.setBounds(10, 440, 95, 20);
 
     //Filter
     FilterSelect.ComboBox.setBounds(245, 21, 95, 20);
