@@ -23,6 +23,10 @@ double AugsVoice::NoteNumberToHz(int midiNoteNumber, TuningType TT)
         return FREQ_A * std::pow(1.5, (midiNoteNumber - 69) / 7.0);
     case AugsVoice::FOUR_TWELVE_ET:
         return FREQ_A * std::pow(1.25, (midiNoteNumber - 69) / 4.0);
+    case AugsVoice::EXACT_ET:
+        return FREQ_A * std::pow(1.059234861, (midiNoteNumber - 69));
+    case AugsVoice::TRI_ET:
+        return FREQ_A * std::pow(1.09587269114, (midiNoteNumber - 69));
     default:
         return 440.0f;
     }

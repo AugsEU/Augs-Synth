@@ -32,7 +32,7 @@ const FloatParam_Properties FloatParamProps[NUM_FLOAT_PARAMS] =
         {"DelayTime",   "DlyTm",    0.0,    2.0,    0.5,    0.6}, //13
         {"LowTyp",      "Low type", 0.0,    1.0,    0.0,    1.0}, //14
         {"BandTyp",     "Band type",0.0,    1.0,    0.0,    1.0}, //15
-        {"Tuning",  "Scale Tuning" ,0.0,    2.0,    0.0,    1.0} }; //16
+        {"Tuning",  "Scale Tuning" ,0.0,    4.0,    0.0,    1.0} }; //16
 
 //Filter Enums
 enum FilterMode

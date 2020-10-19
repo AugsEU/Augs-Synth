@@ -73,7 +73,7 @@ void AugsSynthAudioProcessorEditor::InitGUI()
     DlyTimeSlider.Slider.setTextValueSuffix("s");
 
     //Tuning
-    InitCombo(TuningSelect, 16, { "12-TET","7-12-ET", "4-12-ET" });
+    InitCombo(TuningSelect, 16, { "12-TET","7-12-ET", "4-12-ET","Exact-ET","Tri ET" });
 }
 
 void AugsSynthAudioProcessorEditor::InitSlider(Slider_Attach& MySlider, int Param_ID, double Increment, Slider::SliderStyle style)

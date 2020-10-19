@@ -18,6 +18,8 @@ public:
 		TWELVE_TET = 0,
 		SEVEN_TWELVE_ET,
 		FOUR_TWELVE_ET,
+		EXACT_ET,
+		TRI_ET,
 		kNumTuningTypes
 	};
 
